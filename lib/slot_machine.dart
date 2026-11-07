@@ -20,44 +20,44 @@ class _SlotMachineState extends State<SlotMachine> {
   var _slot2 = _lemon;
   var _slot3 = _seven;
   var _message = '';
+  // Добавили флаг для отслеживания вращения (если планируете анимацию, пока просто false)
+  final bool _isSpinning = false; 
 
-
-  void _reset(){
+  void _reset() {
     setState(() {
       _coins = 10;
       _slot1 = _cherry;
       _slot2 = _lemon;
       _slot3 = _seven;
-      _message = '';      
+      _message = '';
     });
   }
 
   void _spin() {
-    if (_coins <= 0){
+    if (_coins <= 0) {
       setState(() {
-        {
-          _message = 'Монеты закончились! 😢';
-        }
+        _message = 'Монеты закончились! 😢';
       });
       return;
-    } else {
-      _coins -= 1;
-      _message = _coins == 0
-        ? 'Монеты закончились! 😢'
-        : 'Попробуй ещё раз 😔 -1 монета';
-  }
+    }
 
     setState(() {
+      // 1. Списываем ровно 1 монету за попытку
+      _coins -= 1; 
+
+      // 2. Генерируем случайные символы
       _slot1 = _symbols[_random.nextInt(_symbols.length)];
       _slot2 = _symbols[_random.nextInt(_symbols.length)];
       _slot3 = _symbols[_random.nextInt(_symbols.length)];
 
+      // 3. Проверяем результат
       if (_slot1 == _slot2 && _slot2 == _slot3) {
-        _coins += 3;
+        _coins += 3; // Возвращаем ставку + выигрыш
         _message = 'Победа! 🎉 +3 монеты';
       } else {
-        _coins -= 1;
-        _message = 'Попробуй ещё раз 😔 -1 монета';
+        _message = _coins == 0
+            ? 'Монеты закончились! 😢'
+            : 'Попробуй ещё раз 😔 -1 монета';
       }
     });
   }
@@ -98,7 +98,7 @@ class _SlotMachineState extends State<SlotMachine> {
             color: Colors.white,
           ),
         ),
-        const SizedBox(height: 40), // Теперь эта часть находится внутри children
+        const SizedBox(height: 40),
         ElevatedButton(
           onPressed: _coins > 0 ? _spin : null,
           style: ElevatedButton.styleFrom(
@@ -117,8 +117,15 @@ class _SlotMachineState extends State<SlotMachine> {
             ),
           ),
         ),
-      ], // Квадратная скобка Column children теперь закрывается здесь
+        const SizedBox(height: 12),
+        TextButton(
+          onPressed: _isSpinning ? null : _reset,
+          child: const Text(
+            'Начать заново',
+            style: TextStyle(color: Colors.white70, fontSize: 16),
+          ),
+        ),
+      ],
     );
-    
   }
 }
