@@ -21,7 +21,32 @@ class _SlotMachineState extends State<SlotMachine> {
   var _slot3 = _seven;
   var _message = '';
 
+
+  void _reset(){
+    setState(() {
+      _coins = 10;
+      _slot1 = _cherry;
+      _slot2 = _lemon;
+      _slot3 = _seven;
+      _message = '';      
+    });
+  }
+
   void _spin() {
+    if (_coins <= 0){
+      setState(() {
+        {
+          _message = 'Монеты закончились! 😢';
+        }
+      });
+      return;
+    } else {
+      _coins -= 1;
+      _message = _coins == 0
+        ? 'Монеты закончились! 😢'
+        : 'Попробуй ещё раз 😔 -1 монета';
+  }
+
     setState(() {
       _slot1 = _symbols[_random.nextInt(_symbols.length)];
       _slot2 = _symbols[_random.nextInt(_symbols.length)];
@@ -75,7 +100,7 @@ class _SlotMachineState extends State<SlotMachine> {
         ),
         const SizedBox(height: 40), // Теперь эта часть находится внутри children
         ElevatedButton(
-          onPressed: _spin,
+          onPressed: _coins > 0 ? _spin : null,
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.amber,
             padding: const EdgeInsets.symmetric(
@@ -94,5 +119,6 @@ class _SlotMachineState extends State<SlotMachine> {
         ),
       ], // Квадратная скобка Column children теперь закрывается здесь
     );
+    
   }
 }
