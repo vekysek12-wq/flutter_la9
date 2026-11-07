@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
+import 'slot_row.dart';
+
 
 class SlotMachine extends StatefulWidget {
   const SlotMachine({super.key});
