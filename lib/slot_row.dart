@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 class SlotRow extends StatelessWidget {
   const SlotRow({
     super.key,
@@ -6,15 +7,16 @@ class SlotRow extends StatelessWidget {
     required this.slot2,
     required this.slot3,
   });
-    final String slot1;
-    final String slot2;
-    final String slot3;
 
-    @override
-    Widget build(BuildContext context) {
-      return FittedBox(
+  final String slot1;
+  final String slot2;
+  final String slot3;
+
+  @override
+  Widget build(BuildContext context) {
+    return FittedBox(
       fit: BoxFit.scaleDown,
-        child: Row(
+      child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Image.asset(slot1, width: 100, height: 100),
@@ -24,6 +26,6 @@ class SlotRow extends StatelessWidget {
           Image.asset(slot3, width: 100, height: 100),
         ],
       ),
-    ); // FittedBox
+    );
   }
 }

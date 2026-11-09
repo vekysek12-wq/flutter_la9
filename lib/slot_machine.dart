@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
 import 'dart:math';
+import 'package:flutter/material.dart';
 import 'slot_row.dart';
-
 
 class SlotMachine extends StatefulWidget {
   const SlotMachine({super.key});
@@ -17,13 +16,37 @@ class _SlotMachineState extends State<SlotMachine> {
   static const _symbols = [_cherry, _lemon, _seven];
 
   final _random = Random();
+
   var _coins = 10;
   var _slot1 = _cherry;
   var _slot2 = _lemon;
   var _slot3 = _seven;
   var _message = '';
-  // Добавили флаг для отслеживания вращения (если планируете анимацию, пока просто false)
-  final bool _isSpinning = false; 
+
+  void _spin() {
+    if (_coins <= 0) {
+      setState(() {
+        _message = 'Монеты закончились! 🪙';
+      });
+      return;
+    }
+
+    setState(() {
+      _slot1 = _symbols[_random.nextInt(_symbols.length)];
+      _slot2 = _symbols[_random.nextInt(_symbols.length)];
+      _slot3 = _symbols[_random.nextInt(_symbols.length)];
+
+      if (_slot1 == _slot2 && _slot2 == _slot3) {
+        _coins += 3;
+        _message = 'Победа! +3 монеты';
+      } else {
+        _coins -= 1;
+        _message = _coins == 0
+            ? 'Монеты закончились! 🪙'
+            : 'Попробуй ещё раз -1 монета';
+      }
+    });
+  }
 
   void _reset() {
     setState(() {
@@ -35,42 +58,13 @@ class _SlotMachineState extends State<SlotMachine> {
     });
   }
 
-  void _spin() {
-    if (_coins <= 0) {
-      setState(() {
-        _message = 'Монеты закончились! 😢';
-      });
-      return;
-    }
-
-    setState(() {
-      // 1. Списываем ровно 1 монету за попытку
-      _coins -= 1; 
-
-      // 2. Генерируем случайные символы
-      _slot1 = _symbols[_random.nextInt(_symbols.length)];
-      _slot2 = _symbols[_random.nextInt(_symbols.length)];
-      _slot3 = _symbols[_random.nextInt(_symbols.length)];
-
-      // 3. Проверяем результат
-      if (_slot1 == _slot2 && _slot2 == _slot3) {
-        _coins += 3; // Возвращаем ставку + выигрыш
-        _message = 'Победа! 🎉 +3 монеты';
-      } else {
-        _message = _coins == 0
-            ? 'Монеты закончились! 😢'
-            : 'Попробуй ещё раз 😔 -1 монета';
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          '💰 Монеты: $_coins',
+          '🪙 Монеты: $_coins',
           style: const TextStyle(
             fontSize: 28,
             color: Colors.white,
@@ -78,18 +72,10 @@ class _SlotMachineState extends State<SlotMachine> {
           ),
         ),
         const SizedBox(height: 40),
-        FittedBox(
-          fit: BoxFit.scaleDown,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Image.asset(_slot1, width: 100, height: 100),
-              const SizedBox(width: 16),
-              Image.asset(_slot2, width: 100, height: 100),
-              const SizedBox(width: 16),
-              Image.asset(_slot3, width: 100, height: 100),
-            ],
-          ),
+        SlotRow(
+          slot1: _slot1,
+          slot2: _slot2,
+          slot3: _slot3,
         ),
         const SizedBox(height: 24),
         Text(
@@ -121,10 +107,13 @@ class _SlotMachineState extends State<SlotMachine> {
         ),
         const SizedBox(height: 12),
         TextButton(
-          onPressed: _isSpinning ? null : _reset,
+          onPressed: _reset,
           child: const Text(
-            'Начать заново',
-            style: TextStyle(color: Colors.white70, fontSize: 16),
+            'НАЧАТЬ ЗАНОВО',
+            style: TextStyle(
+              color: Colors.white70,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ],
