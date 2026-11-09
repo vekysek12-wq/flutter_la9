@@ -1,17 +1,29 @@
-# slot_machine_stash
+Лабораторная работа №9. Flutter: StatefulWidget и управление состоянием
 
-A new Flutter project.
+Студент: Сташенко ДМитрий
+Группа: ИСП-243
+Дата сдачи: 10.11.2026
+Репозиторий:  https://github.com/vekysek12-wq/flutter_la9.git
 
-## Getting Started
+Что изучили:
+1. Разницу между StatelessWidget и StatefulWidget: первый описывает интерфейс по конфигурации, второй хранит изменяемое состояние в отдельном объекте State.
+2. Управление состоянием через setState(): при изменении полей State Flutter перестраивает build() с новыми значениями.
+3. Подключение локальных изображений через pubspec.yaml (раздел assets) и загрузку их виджетом Image.asset().
+4. Асинхронную логику во Flutter: Future, Future.delayed, Future.wait, async/await, а также проверки mounted после await, чтобы не вызывать setState() после dispose.
+5. Анимации и обратную связь в UI: AnimatedOpacity, AnimatedSwitcher, блокировка кнопок через onPressed: null, плавное замедление барабанов в три фазы.
 
-This project is a starting point for a Flutter application.
+Скриншот финального приложения: img/screenshot_final.png
 
-A few resources to get you started if this is your first Flutter project:
+Инструкция по запуску:
+1. Установите Flutter SDK (stable, 3.x) и убедитесь, что flutter doctor не показывает критичных ошибок для web-разработки.
+2. Клонируйте репозиторий: git clone https://github.com/vekysek12-wq/flutter_la9.git
+3. Перейдите в папку: cd flutter_la9
+4. Подтяните зависимости: flutter pub get
+5. Запустите приложение в Chrome: flutter run -d chrome
+6. Нажмите "КРУТИТЬ" — барабаны начнут вращаться и остановятся по очереди. Три одинаковых символа дают +3 монеты, три семёрки — джекпот +10, проигрыш отнимает 1 монету. Кнопка "НАЧАТЬ ЗАНОВО" сбрасывает игру к 10 монетам.
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Правила игры:
+- Три семёрки (джекпот): +10 монет.
+- Три одинаковых символа: +3 монеты.
+- Любая другая комбинация: -1 монета.
+- 0 монет: игра окончена, доступен сброс.
